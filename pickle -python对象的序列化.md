@@ -59,9 +59,89 @@ pickle.__dumps__(obj, protocol=None, *, fix_imports=True):
 * 将序列化后的对象（obj）当做一个字节对象返回，而不是写入到一个文件中
 * 参数Protocol和fix_imports的含义与dump是一样的<br/>  
 
-pickle.__load__(file, *, fix_imports=True, encoding="ASCII", errors="strict"):<br/>
+pickle.__load__(file, *, fix_imports=True, encoding="ASCII", errors="strict"):
 * 从一个open的文件中读取序列化后的对象，并且返回被重组的对象层次结构，等价于Unpickler(file).load()
 * pickle会自动检测协议版本，所以并不需要protocol参数，超过的序列化的对象二进制字节将会被忽略
 * file必须可以执行两个方法，一个是需要整型参数的read方法，一个是无参的readline()方法，这两个方法都返回字节（bytes）, 因此file是磁盘上的一个可读取二进制的文件，一个io.BytesIO对象，或者其它任意的自定义满足此接口的对象
-* fix_imports、encoding和errors为可选的关键字参数，这些参数是用来处理由Python 2的序列化生成的流的兼容问题，如果fix_imports为True,pickle会将Python 2中的names映射成Python 3使用的names， encoding和errors告知pickler如何处理被Python 2序列化的八比特字符串实例，它们的默认值分别是'ASCII' 和'strict'， encoding可以将这些八比特的字符串实例当做字节对象进行读取
-   
+* fix_imports、encoding和errors为可选的关键字参数，这些参数是用来处理由Python 2的序列化生成的流的兼容问题，如果fix_imports为True,pickle会将Python 2中的names映射成Python 3使用的names， encoding和errors告知pickler如何处理被Python 2序列化的八比特字符串实例，它们的默认值分别是'ASCII' 和'strict'， encoding可以将这些八比特的字符串实例当做字节对象进行读取<br/>
+
+pickle.__loads__(bytes_object, *, fix_imports=True, encoding="ASCII", errors="strict"):
+* 从字节对象中读取反序列化后的对象层次结构，并返回相应的对象
+* pickle会自动检测协议版本，所以并不需要protocol参数，超过的序列化的对象二进制字节将会被忽略
+* fix_imports、encoding和errors为可选的关键字参数，这些参数是用来处理由Python 2的序列化生成的流的兼容问题，如果fix_imports为True,pickle会将Python 2中的names映射成Python 3使用的names， encoding和errors告知pickler如何处理被Python 2序列化的八比特字符串实例，它们的默认值分别是'ASCII' 和'strict'， encoding可以将这些八比特的字符串实例当做字节对象进行读取<br/>
+
+pickled定义了三个异常：
+
+exception.pickle.__PickleError__:<br/>
+&ensp;&ensp;&ensp;&ensp;其它序列化异常的共同父类，同时它也是继承于Exception
+
+exception.pickle.__PicklingError__:<br/>
+&ensp;&ensp;&ensp;&ensp;当pickler遇到了无法序列化的对象时，抛出该异常。它继承于PickleError
+&ensp;&ensp;&ensp;&ensp;参考 What can be pickled and unpickled?查看那些对象无法序列化
+
+exception.pickle.__UnpicklingError__:<br/>
+&ensp;&ensp;&ensp;&ensp;当对象无法被反序列化时，例如：数据损坏，加密文件，则抛出该异常。它继承于PickleError
+&ensp;&ensp;&ensp;&ensp;注意：序列化过程中也可能抛出其它异常，包含AttributeErro、EOFError、ImportError和IndexError
+
+pickle模块会输出两个类，Pickler和Unpickler
+
+class pickle.__Pickler__(file, protocol=None, *, fix_imports=True):
+* 此类可以将序列化后的数据流写入二进制文件中
+* 可选参数Protocol是一个整型值，告知pickler使用给定的协议等级，pickler支持从0到最高等级的协议，如果没有指定，就使用默认的DEFAULT_PROTOCOL协议，如果指定的是一个负数，那么pickler将会选择HIGHEST_PROTOCOL.
+* file参数必须能执行接收一个单字节参数的write()方法，它可以是磁盘上的文件，为了写入二进制而打开，也可以是io.BytesIO的实例，或者是其它自定义并且满足这个接口的对象
+* 如果fix_imports为True，并且Protocol的值小于3，pickle会试着将Python 3中的names映射成python 2中使用的names,这样序列化后的对象可以被Python 2读取
+
+__dump__(obj):<br/>
+&ensp;&ensp;&ensp;&ensp;将obj参数表示的对象写入构造函数中给定的文件中
+
+__persistent_id__(obj):<br/>
+* 默认不做任何事，为了子类可以重写而存在
+* 如果persistent_id函数返回None，则正常对obj进行序列化，若是返回其它的值作为obj的persistent id，并且这个persistent * id的含义已经在Unpickler.persistent_load()中定义了。注意这个方法返回的值自身不能有一个persistent ID
+
+__dispatch_table__:<br/>
+* pickler序列化对象的dispatch table是可以被声明使用copyreeg.pickle()的reduction函数的注册表, dispatch_table是一个mapping,它的key值是类，而value值是reduction函数。 reduction函数需要相关类的一个参数，并且符合__reduce__()方法的相同条件
+* 默认情况下，一个pickler对象不会有dispatch_table属性，而是使用copyreg模块管理的全局dispatch_table。但是，当需要自定*义序列化一个特殊对象时，可以在一个字典对象中设置dispatch_table属性。当Pickler的子类有dispatch_table属性时，那么这将&ensp;&ensp;&ensp;&ensp;成为该子类实例的默认dispatch_table。
+
+__fast__:<br/>
+&ensp;&ensp;&ensp;&ensp;已弃用。当设置True值时，启用fast模式。而fast模式将禁用memo的使用，因此不生成多余的PUT操作码，但是<br/>   
+&ensp;&ensp;&ensp;&ensp;不适用于自我参照的对象（self-referential Object）,否则将会导致Pickler的无限递归操作。
+
+class pickle.Unpickler(file, *, fix_imports=True, encoding="ASCII", errors="strict"):<br/>
+* 该类需要一个二进制文件来读取序列化的数据流
+* pickle会自动检测协议版本，因此无需protocol参数
+* file必须可以执行两个方法，一个是需要整型参数的read方法，一个是无参的readline()方法，这两个方法都返回字节（bytes）, 因此file是磁盘上的一个可读取二进制的文件，一个io.BytesIO对象，或者其它任意的自定义满足此接口的对象
+* fix_imports、encoding和errors为可选的关键字参数，这些参数是用来处理由Python 2的序列化生成的流的兼容问题，如果fix_imports为True,pickle会将Python 2中的names映射成Python 3使用的names， encoding和errors告知pickler如何处理被Python 2序列化的八比特字符串实例，它们的默认值分别是'ASCII' 和'strict'， encoding可以将这些八比特的字符串实例当做字节对象进行读取<br/> 
+
+__load()__: <br/>
+&ensp;&ensp;&ensp;&ensp;从构造器中的初始化的文件对象中读取序列化的数据，并返回相应的反序列化对象，忽略对象多余的字节
+
+__persistent_load(pid)__: <br/>
+* 默认抛出UnpicklingError异常
+* pid已经定义了的话，则persistent_load会返回pid所表示的persistent id所表示的特定对象，如果是一个不合法的persistentr ID，则会抛出UnpicklingError异常
+
+__find_class(module,name)__:<br/>
+* 当需要import一个模块时，返回该模块中的对象的名称，并且该模块和name参数是字符串对象，注意，不要望文生义，find_class也可以用于查找方法。
+* 子类可能重写这个方法来加强对对象类型以及对象怎样加载的控制，来减少潜在的安全问题。
+
+## 什么可以被序列化和反序列化？
+下面的类型可以被序列化:
+* None, True以及False
+* 整型数、浮点型数、复数
+* 字符串、字节（bytes）、字节数组(bytearrays)
+* 元组（tuple）、列表（lists）、集合（sets）以及只包含可序列化对象的字典
+* 使用模块中最高等级的定义方式定的的函数（使用def，而不是lambda）
+* 使用模块中最高等级的定义方式定义的内置函数
+* 使用模块中最高等级定义方式定义的类
+* 类的实例中__dict__或者__getstat__()方法是可序列化的
+
+如果尝试序列化不能序列化的对象将会抛出PicklingError异常；当该异常发生时，一些未知的字节可能已经写入文件中了。如果你正在序列化一个高度递归的数据结构，可能会导致超出递归的最大深度，然后抛出ResursionError异常，你可以通过sys.setrecursionlimit()设置递归长度来防止抛出异常
+
+注意：函数（无论是内置的还是用户定义的）序列化的是它可以序列化的命名参数，而不是它的值。这就意味着只有该函数名称，以及该函数所在模块的名称被序列化。而不是函数的代码，或者函数的属性。所以模块必须在反序列化环境中可以被import,并且该模块必须包含模块名对象,否则将会抛出异常
+
+类似地，类也是序列化类名参数，所以有与上述一样的限制。注意：并不是类中的代码或者是数据被序列化，所以在下面的例子中类属性attr并没有存储在反序列化环境中
+
+```
+class Foo:
+    attr = 'A class attribute'
+picklestring = pickle.dumps(Foo)
+```
