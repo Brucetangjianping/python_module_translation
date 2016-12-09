@@ -57,9 +57,9 @@ pickle.__dump__(obj, file, protocol=None, *, fix_imports=True):
 
 pickle.__dumps__(obj, protocol=None, *, fix_imports=True):
 * 将序列化后的对象（obj）当做一个字节对象返回，而不是写入到一个文件中
-* 参数Protocol和fix_imports的含义与dump是一样的<br/>
- 
-pickle.__load__(file, *, fix_imports=True, encoding="ASCII", errors="strict"):
+* 参数Protocol和fix_imports的含义与dump是一样的<br/>  
+
+pickle.__load__(file, *, fix_imports=True, encoding="ASCII", errors="strict"):<br/>
    * 从一个open的文件中读取序列化后的对象，并且返回被重组的对象层次结构，等价于Unpickler(file).load()
    * pickle会自动检测协议版本，所以并不需要protocol参数，超过的序列化的对象二进制字节将会被忽略
    * file必须可以执行两个方法，一个是需要整型参数的read方法，一个是无参的readline()方法，这两个方法都返回字节（bytes）, 因此file是磁盘上的一个可读取二进制的文件，一个io.BytesIO对象，或者其它任意的自定义满足此接口的对象
