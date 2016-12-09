@@ -40,31 +40,28 @@ NOTE： 序列化是比持久化更原始的概念，尽管pickle只是读写文
 序列化对象层次结构，您只需要调用dumps()函数，类似的，反序列化数据流，你可以调用loads()函数，但是，如果您想更好的操作序列化和反序列化，您可以分别创建一个Pickler和Unpickler对象。<br/>
 <br/>
 pickle模块提供了以下常量：<br/>
-<br/>
-pickle.__HIGHEST_PROTOCOL__: <br/>
+
+pickle.__HIGHEST_PROTOCOL__: 
 &ensp;&ensp;&ensp;&ensp;一个整型值，最高的可用协议版本，这个整型值可以和Pickler的构造函数一样，当作一个协议的值传递给dump()和dumps()函数<br/>
-<br/>
-pickle.__DEFAULT_PROTOCOL__:<br/>
+
+pickle.__DEFAULT_PROTOCOL__:
 &ensp;&ensp;&ensp;&ensp;一个整型值，序列化的默认协议版本，可能比HIGHEST_PROTOCOL值小，当前的默认协议为3，为Python 3设计的新协议<br/>
  
 pickle模块提供了以下几个函数可以更便捷的实现序列化<br/>
 
-pickle.__dump__(obj, file, protocol=None, *, fix_imports=True):<br/>
-
+pickle.__dump__(obj, file, protocol=None, *, fix_imports=True):
 &ensp;&ensp;&ensp;&ensp;将一个序列化过的对象(obj参数)写入到文件中（使用open打开的文件），这个和Pickler(file, protocol).dump(obj)是等价的<br/>
 &ensp;&ensp;&ensp;&ensp;可选参数Protocol是一个整型值，告诉pickler使用给定的协议等级，pickler支持从0到最高等级的协议，如果没有指定，就使用默认的DEFAULT_PROTOCOL协议，如果指定的是一个负数，那么pickler将会选择HIGHEST_PROTOCOL.<br/>
 &ensp;&ensp;&ensp;&ensp;file参数必须能执行接收一个单字节参数的write()方法，它可以是磁盘上的文件，为了写入二进制而打开，也可以是io.BytesIO的实例，或者是其它自定义并且满足这个接口的对象<br/>
 &ensp;&ensp;&ensp;&ensp;如果fix_imports为True，并且Protocol的值小于3，pickle会试着将Python 3中的names映射成python 2中使用的names,这样序列化后的对象可以被Python 2读取<br/>
 
-pickle.__dumps__(obj, protocol=None, *, fix_imports=True):<br/>
-
+pickle.__dumps__(obj, protocol=None, *, fix_imports=True):
 &ensp;&ensp;&ensp;&ensp;将序列化后的对象（obj）当做一个字节对象返回，而不是写入到一个文件中<br/>
 &ensp;&ensp;&ensp;&ensp;参数Protocol和fix_imports的含义与dump是一样的<br/>
   
-pickle.__load__(file, *, fix_imports=True, encoding="ASCII", errors="strict") <br/>
-
-   &ensp;&ensp;&ensp;&ensp;从一个open的文件中读取序列化后的对象，并且返回被重组的对象层次结构，等价于Unpickler(file).load()
-   &ensp;&ensp;&ensp;&ensp;pickle会自动检测协议版本，所以并不需要protocol参数，超过的序列化的对象二进制字节将会被忽略
-   &ensp;&ensp;&ensp;&ensp;file必须可以执行两个方法，一个是需要整型参数的read方法，一个是无参的readline()方法，这两个方法都返回字节（bytes）, 因此file是磁盘上的一个可读取二进制的文件，一个io.BytesIO对象，或者其它任意的自定义满足此接口的对象
-   &ensp;&ensp;&ensp;&ensp;fix_imports、encoding和errors为可选的关键字参数，这些参数是用来处理由Python 2的序列化生成的流的兼容问题，如果fix_imports为True,pickle会将Python 2中的names映射成Python 3使用的names， encoding和errors告知pickler如何处理被Python 2序列化的八比特字符串实例，它们的默认值分别是'ASCII' 和'strict'， encoding可以将这些八比特的字符串实例当做字节对象进行读取
+pickle.__load__(file, *, fix_imports=True, encoding="ASCII", errors="strict"):
+   &ensp;&ensp;&ensp;&ensp;从一个open的文件中读取序列化后的对象，并且返回被重组的对象层次结构，等价于Unpickler(file).load()<br/>
+   &ensp;&ensp;&ensp;&ensp;pickle会自动检测协议版本，所以并不需要protocol参数，超过的序列化的对象二进制字节将会被忽略<br/>
+   &ensp;&ensp;&ensp;&ensp;file必须可以执行两个方法，一个是需要整型参数的read方法，一个是无参的readline()方法，这两个方法都返回字节（bytes）, 因此file是磁盘上的一个可读取二进制的文件，一个io.BytesIO对象，或者其它任意的自定义满足此接口的对象<br/>
+   &ensp;&ensp;&ensp;&ensp;fix_imports、encoding和errors为可选的关键字参数，这些参数是用来处理由Python 2的序列化生成的流的兼容问题，如果fix_imports为True,pickle会将Python 2中的names映射成Python 3使用的names， encoding和errors告知pickler如何处理被Python 2序列化的八比特字符串实例，它们的默认值分别是'ASCII' 和'strict'， encoding可以将这些八比特的字符串实例当做字节对象进行读取<br/>
    
