@@ -60,8 +60,8 @@ pickle.__dumps__(obj, protocol=None, *, fix_imports=True):
 * 参数Protocol和fix_imports的含义与dump是一样的<br/>  
 
 pickle.__load__(file, *, fix_imports=True, encoding="ASCII", errors="strict"):<br/>
-   * 从一个open的文件中读取序列化后的对象，并且返回被重组的对象层次结构，等价于Unpickler(file).load()
-   * pickle会自动检测协议版本，所以并不需要protocol参数，超过的序列化的对象二进制字节将会被忽略
-   * file必须可以执行两个方法，一个是需要整型参数的read方法，一个是无参的readline()方法，这两个方法都返回字节（bytes）, 因此file是磁盘上的一个可读取二进制的文件，一个io.BytesIO对象，或者其它任意的自定义满足此接口的对象
-   * fix_imports、encoding和errors为可选的关键字参数，这些参数是用来处理由Python 2的序列化生成的流的兼容问题，如果fix_imports为True,pickle会将Python 2中的names映射成Python 3使用的names， encoding和errors告知pickler如何处理被Python 2序列化的八比特字符串实例，它们的默认值分别是'ASCII' 和'strict'， encoding可以将这些八比特的字符串实例当做字节对象进行读取
+* 从一个open的文件中读取序列化后的对象，并且返回被重组的对象层次结构，等价于Unpickler(file).load()
+* pickle会自动检测协议版本，所以并不需要protocol参数，超过的序列化的对象二进制字节将会被忽略
+* file必须可以执行两个方法，一个是需要整型参数的read方法，一个是无参的readline()方法，这两个方法都返回字节（bytes）, 因此file是磁盘上的一个可读取二进制的文件，一个io.BytesIO对象，或者其它任意的自定义满足此接口的对象
+* fix_imports、encoding和errors为可选的关键字参数，这些参数是用来处理由Python 2的序列化生成的流的兼容问题，如果fix_imports为True,pickle会将Python 2中的names映射成Python 3使用的names， encoding和errors告知pickler如何处理被Python 2序列化的八比特字符串实例，它们的默认值分别是'ASCII' 和'strict'， encoding可以将这些八比特的字符串实例当做字节对象进行读取
    
