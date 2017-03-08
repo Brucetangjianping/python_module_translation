@@ -34,3 +34,36 @@ Python 3.5.2 (v3.5.2:4def2a2901a5, Jun 25 2016, 22:18:55) [MSC v.1900 64 bit (AM
 Type "help", "copyright", "credits" or "license" for more information.
 >>>
 ```
+
+当创建多行输入的结构时，你需要继续输入的行符，如下if语句所示：
+```
+>>> the_world_is_flat = True
+>>> if the_world_is_flat:
+...     print('Be careful not to fall off !')
+...
+Be careful not to fall off !
+```
+想要了解更多关于交互模式的信息，请跳转到```交互模式```
+
+### 解释器和它的环境
+#### 源代码编码
+默认情况下，python的源文件是使用UTF-8作为编码格式的，因为在utf-8的字符集中，世界上大多数的字符都能够找到到相应的编码。虽然标准库中只是用ASCII字符集作为标识符， 但是使用utf-8是任何可移植代码需要遵守的公约。为了能够正确的展示你的字符，你的编辑器必须识别UTF-8的文件，并且该编辑器含有一种字体，能支持文件中所有的字符。
+
+为了声明不同于默认的编码格式，你需要在文件头加一个特殊的注释代码，语法如下所示：
+```
+# -*- coding: encoding -*- 
+```
+其中的encoding代指python的编解码器认可的任何一种编码。
+
+例如，为了表明该文件是使用Windows-1252的编码格式，你的源代码文件的首行应该这样添加：
+```
+# -*- coding: cp-1252 -*-
+```
+有个例外，当源代码是以Unix"shebang"行开始的，那么编码的声明应该放在第二行，如下所示：
+```
+#! /usr/bin/env python3
+# -*- coding: cp-1252 -*-
+```
+
+#### 脚注
+在unix系统中，Python3.x解释器的执行程序是使用默认的命名，而不是使用```python```命名，所以可以同时装python2.x而不冲突。
