@@ -60,10 +60,46 @@ Traceback (most recent call last):
 NameError: name 'n' is not defined
 ```
 
-python对浮点数有很大的支持，不同类型的操作数，会将integer的操作数先变成浮点类型：
+python完全支持浮点数，不同类型的操作数，会将integer的操作数先变成浮点类型：
 ```
 >>> 3 * 3.75 / 1.5
 7.5
 >>> 7.0  /  2
 3.5
+```
+在交互模式中，最后打印的表达式被赋给了`_`变量。这就意味着，当你使用Python作为一个桌面计算器时，对于继续计算在某些方面老说很方便。例如：
+```
+>>> tax = 12.5/100
+>>> price = 100.50
+>>> price * tax
+12.5625
+>>> price + _
+113.0625
+>>> round(_, 2)
+113.06
+```
+这个变量应该当做一个只读数据，不要尝试显式给它赋值，你可能会创建了一个和内置变量相同名字的本地变量，那么你的变量就会掩盖了内置变量，以及失去了它本身的很酷的行为。
+
+除了`int`和`float`，Python还支持其它类型的数字，例如`Decimal`和`Fraction`。Python也支持`Complex Numbers`，使用`j`或者`J`当后缀来表示虚数部分(如：2 + 4j)
+
+#### 3.1.2 字符串
+除了数字，Python也能操作用多种方式表示的字符串， 使用单引号`('...')`和双引号`("...")`表示的字符串是相同结果，使用`\`来转义引号：
+```
+>>> 'spam eggs'
+'spam eggs'
+>>> 'doesn'\t'
+  File "<stdin>", line 1
+    'doesn'\t'
+             ^
+SyntaxError: unexpected character after line continuation character
+>>> 'doesn\'t'
+"doesn't"
+>>>
+>>>
+>>> '"Yes", he said'
+'"Yes", he said'
+>>> "\"Yes\", he said"
+'"Yes", he said'
+>>> '"Isn\'t it", she said'
+'"Isn\'t it", she said'
 ```
