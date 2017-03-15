@@ -111,3 +111,63 @@ ame
 >>> print(r'C:\some\name')
 C:\some\name
 ```
+有一些字符串文字可能跨了好几行，可以使用`"""..."""`或者`'''...'''`.字符串会自动添加换行符，但是你也可以在后面添加`\`取消自动添加行结束符，如下所示：
+```
+print("""\
+... heheh
+... hahah
+... enene
+... """)
+```
+打印的输出(注意，第一个行并不是空格换行)如下所示
+```
+heheh
+hahah
+enene
+```
+多个字符串可以用`+`操作符连成一个字符串（粘在一块），并且可以使用`*`来处理多个相同的字符
+```
+>>> # 3 times 'un', followed by 'ium'
+...
+>>> 3 * 'un' + 'ium'
+'unununium'
+```
+两个或多个字符串(都是使用引号包住)，如果中间没有其它符号，则会自动的连成一个字符串：
+```
+>>> 'Py''thon'
+'Python'
+```
+这仅仅适用两个都是字符串的情况，变量和表达式则不适用
+```
+>>> prefix'thon'
+  File "<stdin>", line 1
+    prefix'thon'
+               ^
+SyntaxError: invalid syntax
+>>> ('un'*3)'um'
+  File "<stdin>", line 1
+    ('un'*3)'um'
+               ^
+SyntaxError: invalid syntax
+```
+如果你想将变量或者一个变量和一个字符串连在一块，可以使用`+`
+```
+>>> prefix + 'thon'
+'Python'
+```
+这个功能对于长字符串的拼写很有帮助:
+```
+>>> text = ('this is a very long string,')
+>>> text = ('this is a very long string,'
+...         'you should break into two lines')
+>>> text
+'this is a very long string,you should break into two lines'
+```
+字符串还可以被索引(使用下标访问)，第一个字符的下标为0，没有分割的字符串类型，一个字符就是长度为1的字符串：
+```
+>>> word = 'Python'
+>>> word[0]
+'P'
+>>> word[5]
+'n'
+```
