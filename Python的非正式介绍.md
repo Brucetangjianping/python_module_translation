@@ -103,3 +103,11 @@ SyntaxError: unexpected character after line continuation character
 >>> '"Isn\'t it", she said'
 '"Isn\'t it", she said'
 ```
+如果你不想字符的`\`前缀被转义为特殊字符，你可以在字符串第一个引号前面加一个`r`
+```
+>>> print('C:\some\name')
+C:\some
+ame
+>>> print(r'C:\some\name')
+C:\some\name
+```
