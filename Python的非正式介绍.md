@@ -201,5 +201,60 @@ SyntaxError: invalid syntax
 'Py'
 >>> word[4:]
 'on'
+>>> word[-2:]
+'on'
 ```
-有种很好记的方法，来记录切片是如何工作的，也就是左边第一个字母对应的小编为0，右边第一个字母是滴
+有种很好记的方法，来记录切片是如何工作的，也就是左边第一个字母对应的小编为0，一个长度为n的字符串右边最后一个字符的下标为n,如下所示：
+```
+ +---+---+---+---+---+---+
+ | P | y | t | h | o | n |
+ +---+---+---+---+---+---+
+ 0   1   2   3   4   5   6
+-6  -5  -4  -3  -2  -1
+```
+第一行的数字是字符串的正序下标，从0到6， 而第二行给出的是该字符串的相应的负数下标。使用边界下标为i和j分别是用i到j之间的字符组成了一个字符串，可以进行切片。
+
+对于没有负数的切片，切片的长度和指数是有区别的，如果两个都有边界，例如`word[1:3]`的长度是2
+
+如果尝试使用大于字符串长度的数字作为字符串的下标查值，则会返回一个错误
+```
+>>> word[42]
+Traceback (most recent call last):
+  File "<stdin>", line 1, in <module>
+IndexError: string index out of range
+```
+但是，如果使用一个大于字符串长度的值来进行切片，却是可行的。
+```
+>>> word[4:42]
+'on'
+>>> word[42:]
+''
+>>> word[42: 45]
+''
+```
+虽然字符串可以切片，但是Python的字符串是不变的，因此给字符串的某个下标赋值是会返回错误的。
+```
+>>> word[0]='J'
+Traceback (most recent call last):
+  File "<stdin>", line 1, in <module>
+TypeError: 'str' object does not support item assignment
+>>> word[2:] = 'py'
+Traceback (most recent call last):
+  File "<stdin>", line 1, in <module>
+TypeError: 'str' object does not support item assignment
+```
+如果你想要个不同的字符串，自己建一个新的就好了。
+```
+>>> word[2:] = 'py'
+Traceback (most recent call last):
+  File "<stdin>", line 1, in <module>
+TypeError: 'str' object does not support item assignment
+>>> 'J' + word[2:]
+'Jthon'
+```
+内置函数`len()`返回的是字符串的长度
+```
+>>> s = 'supercalifragilisticexpialidocious'
+>>> len(s)
+34
+```
