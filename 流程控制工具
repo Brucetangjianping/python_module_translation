@@ -1,0 +1,42 @@
+之前只介绍了`while`语句，Python和其它语言一样，也有很多常用的流程控制语句。
+### 4.1 `if`语句
+也许最为人所知的语句类型当属`if`语句，例如：
+```
+>>> x = int(input("Please enter an integer:"))
+Please enter an integer:42
+>>> if x < 0:
+...     x = 0;
+...     print('Negative changes to zero')
+... elif x == 0:
+...     ptint('Zero')
+... else:
+...     print('More')
+...
+More
+>>> x
+42
+```
+这个例子中有0和更多的`elif`部分，`else`部分是一个可选项。关键字`elif`是`else if`的缩写，这是用于避免过多的缩进。这个`if...elif...elif`序列是其它语言中`switch`或`case`语句的替代想。
+
+### 4.2 `for`语句
+`for`语句可能和在C或Pascal中使用的有点不同，不总是按照等差数列来迭代(像Pascal)，或者给定迭代次数以及结束的条件(像C).Python的`for`语句可以以它们在序列中的顺讯，迭代任何序列的元素(一个list或一个字符串)。例如:
+```
+>>> # 字符串测试
+... words = ['cat', 'window', 'defenstrate']
+>>> for w in words:
+...     print(w, len(w))
+...
+cat 3
+window 6
+defenstrate 11
+```
+在循环时，如果你想要改变序列(例如，复制选定的元素)，建议先做好备份。迭代一个序列并不会隐式的做一个备份。切片符号做这个特别方便。
+```
+>>> for w in words[:]:
+...     if len(w) > 6:
+...         words.insert(0, w)
+...
+>>> words
+['defenstrate', 'cat', 'window', 'defenstrate']
+```
+如果使用的是`for w in words:`, 这个例子将会创建一个无限的序列，无限循环的插入`'defenstrate'`
